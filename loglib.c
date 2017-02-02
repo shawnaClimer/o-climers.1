@@ -53,7 +53,7 @@ char *getlog(void) {
 	errno = 0; //set errno to 0
 	message[0] = '\0'; //set message to empty
 	strcat(message, program); //begin with program name
-	strcat(message, ": ");
+	//strcat(message, ": ");
 	//add timestamp !!need to be put in a string first!! use sprintf?
 	strcat(message, data.time);
 	strcat(message, ": Error: nValue = ");
@@ -119,8 +119,27 @@ int main(int argc, string argv[]){
 	int nValue = 42;
 	//add code to change value if command is used
 	
+	//array of "error" messages
+	const char *msg[3];
+	msg[0] = "Happy Birthday!\n";
+	msg[1] = "Thanks for visiting.\n";
+	msg[2] = "That won't work.\n";
 	
-	//calls to add messages
+	//puts message and timestamp into node
+	data_t temp;//for message and timestamp
+	
+	struct timespec res;
+	clockid_t clockid;//clockid for timestamp
+	clockid = CLOCK_REALTIME;
+	
+	for(int i=0; i<3; i++){
+		clock_getres(clockid, res);
+		temp.time = res.tv_nsec;
+		temp.string = msg[i];
+		
+		addmsg(temp);
+	}
+	
 	
 	//call to savelog to write to file
 	if(savelog(filename) != 0){
