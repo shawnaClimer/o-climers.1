@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "log.h"
 
 typedef struct list_struct {
@@ -10,17 +11,40 @@ typedef struct list_struct {
 static log_t *headptr = NULL;
 static log_t *tailptr = NULL;
 
-int addmsg(data_t data) {
+int addmsg(data_t data, const char *ermsg) {
 	//build string to add to log
-	char *message[100] = buildmsg(data);
-	//add msg to log
+	char *message[200];
+	int success = buildmsg(data, message, ermsg);
+	if(success == -1){
+		return -1;
+	}else {
+	//need to add message to list
 	
-	return 0;
+		
+		return 0;
+	}
 }
 
-char *buildmsg(data_t data){
-	//where msg gets assembled
-	return msg;
+int buildmsg(data_t data, char *message, const char *ermsg){
+	//where message gets assembled
+	errno = 0; //set errno to 0
+	message[0] = '\0'; //set message to empty
+	strcat(message, program); //begin with program name
+	strcat(message, ": ");
+	//add timestamp !!need to be put in a string first!! use sprintf?
+	strcat(message, data.time);
+	strcat(message, ": Error: nValue = ");
+	//add nValue !!need to be put in a string first!!
+	strcat(message, nValue);
+	//add error message
+	strcat(message, ermsg);
+	if (errno){
+		perror("Log message failed to build");
+		return -1;
+	}else{
+		return 0;
+	}
+	
 	
 }
 
