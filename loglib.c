@@ -52,15 +52,15 @@ char *getlog(void) {
 	
 	errno = 0; //set errno to 0
 	message[0] = '\0'; //set message to empty
+	
+	//get each node
+	
 	strcat(message, program); //begin with program name
-	//strcat(message, ": ");
 	//add timestamp !!need to be put in a string first!! use sprintf?
 	strcat(message, data.time);
-	strcat(message, ": Error: nValue = ");
-	//add nValue !!need to be put in a string first!!
-	strcat(message, nValue);
-	//add error message
-	strcat(message, ermsg);
+	strcat(message, data.string);
+	
+	
 	if (errno){
 		perror("Log message failed to build");
 		return -1;
@@ -112,6 +112,7 @@ int main(int argc, string argv[]){
 	char *filename = "logfile.txt";
 	//add code to rename if filename command is used
 	
+	
 	//program name for log file
 	char *program = "./loglib: ";
 	
@@ -119,11 +120,17 @@ int main(int argc, string argv[]){
 	int nValue = 42;
 	//add code to change value if command is used
 	
+	
 	//array of "error" messages
 	const char *msg[3];
-	msg[0] = "Happy Birthday!\n";
-	msg[1] = "Thanks for visiting.\n";
-	msg[2] = "That won't work.\n";
+	for(int i=0; i<3; i++){
+		msg[i] = ": Error: nValue = ";
+		//add nValue !!need to be put in a string first!!
+		strcat(msg[i], nValue);
+	}
+	strcat (msg[0], " - Happy Birthday!\n");
+	strcat (msg[1], " - Thanks for visiting.\n");
+	strcat (msg[2], " - That won't work.\n");
 	
 	//puts message and timestamp into node
 	data_t temp;//for message and timestamp
@@ -137,7 +144,7 @@ int main(int argc, string argv[]){
 		temp.time = res.tv_nsec;
 		temp.string = msg[i];
 		
-		addmsg(temp);
+		addmsg(temp);//add message to node list
 	}
 	
 	
