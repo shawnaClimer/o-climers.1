@@ -138,11 +138,11 @@ int savelog(char *filename){
 				ch = message[i];
 				i++;
 				//checks for error while writing to file
-				/*if(fputc(ch, logfile) == 'EOF'){
+				if(fputc(ch, logfile) != ch){
 					//perror("Failed to write to log file");
 					fclose(logfile);
 					return -1;
-				}*/
+				}
 			}			
 			//close file
 			fclose(logfile);
