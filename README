@@ -7,7 +7,5 @@ use make logger to compile the program
 -n x changes the default integer in the message
 -l filename allows you to specify the name of the text file for output
 
-when you make the executable, there are some warnings about passing incompatible pointer type. I will try to correct these, but for now it seems to work ok.
-
 I used Github for version control. My repository can be found here:
 https://github.com/shawnaClimer/o-climers.1

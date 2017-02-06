@@ -67,10 +67,12 @@ char *getlog(void) {
 	message[0] = '\0'; //set message to empty
 	
 	long time;
-	//char *tmstring;
+	int nsize = sizeof(time);
+	nsize++;
+	char *tmstring = (char *)malloc(nsize);
 	char *msg;
 	log_t *nextnode;
-	int nsize;
+	
 	
 	if(headptr == NULL){
 		//empty list
@@ -86,13 +88,13 @@ char *getlog(void) {
 			//puts("2");
 			//puts(message);
 			time = nextnode->item.time;//read in timestamp
-			nsize = sizeof(time);
-			nsize++;
+			//nsize = sizeof(time);
+			//nsize++;
 			//char buf[nsize + 1];
 			//puts("next");
-			char *tmstring[nsize];
+			//char *tmstring[nsize];
 			//Todo this needs improvement
-			sprintf(tmstring, "%11d", time);//convert to string
+			sprintf(tmstring, "%d", time);//convert to string
 			//puts(tmstring);
 			strcat(message, tmstring);//add timestamp to message
 			//puts("3");
