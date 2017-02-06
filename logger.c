@@ -72,7 +72,7 @@ int main(int argc, char **argv){
 		perror("Couldn't allocate memory");
 		return -1;
 	}
-	puts("allocated message memory");
+	//puts("allocated message memory");
 	int i;
 	int success=0;
 	for(i=0; i<3; i++){
@@ -81,12 +81,12 @@ int main(int argc, char **argv){
 		strcat(msg, n);
 		if(i==0){
 			strcat(msg, " - Happy Birthday!\n");
-			puts("first message");
+			//puts("first message");
 		}else if(i==1){
 			strcat(msg, " - Thanks for visiting.\n");
 		}else{
 			strcat(msg, " - That won't work.\n");
-			puts("third message");
+			//puts("third message");
 		}
 		if(clock_getres(clockid, res) == 0){
 			//get the time
@@ -95,24 +95,25 @@ int main(int argc, char **argv){
 			}
 		}
 		//temp.time = res->tv_nsec;//time in nanosecs
-		puts("time: \n");
-		puts(msg);
+		//puts("time: \n");
+		//puts(msg);
 		temp.string = msg;
-		puts(temp.string);
+		//puts(temp.string);
 		//temp.time = 45448456545484412;
 		//strcpy(temp.string, msg);
 		if(addmsg(temp) == -1){
-			puts("did not add node to list");//add message to node list
+			//puts("did not add node to list");//add message to node list
+			perror("node did not get added to list");
+			return -1;
 		}
-		else{
-			puts("added node");
-		}
+		
 	}
 	
 	//call to savelog to write to file
 	if(savelog(filename) != 0){
 		perror("Failed to write to log file");
-		puts("savelog didn't work\n");
+		//puts("savelog didn't work\n");
+		return -1;
 	}
 	
 	//call clearlog to empty list 

@@ -1,0 +1,13 @@
+README
+
+logger puts a message (including an integer) with a timestamp (nanoseconds) into a node that is inserted into a list and then reads the messages and timestamps into a text file.
+
+use make logger to compile the program
+-h returns a short help list
+-n x changes the default integer in the message
+-l filename allows you to specify the name of the text file for output
+
+when you make the executable, there are some warnings about passing incompatible pointer type. I will try to correct these, but for now it seems to work ok.
+
+I used Github for version control. My repository can be found here:
+https://github.com/shawnaClimer/o-climers.1

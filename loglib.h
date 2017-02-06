@@ -19,11 +19,11 @@ int addmsg(data_t data) {
 	//allocates node for data and adds to end of list
 	log_t *newnode;
 	int nodesize;
-	nodesize = sizeof(log_t) + strlen(data.string) + 1;// + sizeof(data.time);
+	nodesize = sizeof(log_t) + strlen(data.string) + 1;
 	totalsize = totalsize + nodesize;
 	//try to add node
 	if((newnode = (log_t *)(malloc(nodesize))) == NULL){
-		puts("cant add node. loglib.h\n");
+		//puts("cant add node. loglib.h\n");
 		return -1;
 	}
 	
@@ -37,7 +37,7 @@ int addmsg(data_t data) {
 		tailptr->next = newnode;//adds to end of list
 	}
 	tailptr = newnode;
-	puts("added node to list\n");
+	//puts("added node to list\n");
 	return 0;
 	
 }
@@ -59,7 +59,7 @@ char *getlog(void) {
 	char *message = (char *)malloc(totalsize);
 	//need to allocate string long enough for list
 	if(message == NULL){
-		puts("couldn't allocate memory in getlog\n");
+		//puts("couldn't allocate memory in getlog\n");
 		return NULL;
 	}
 	
@@ -75,29 +75,30 @@ char *getlog(void) {
 	if(headptr == NULL){
 		//empty list
 		perror("Empty list");
-		puts("empty list");
+		//puts("empty list");
 		return NULL;
 	}else{
 		nextnode = headptr;
 		while(nextnode != NULL){
 			strcat(message, program); //begin with program name
-			puts("1");
+			//puts("1");
 			strcat(message, ": ");
-			puts("2");
-			puts(message);
+			//puts("2");
+			//puts(message);
 			time = nextnode->item.time;//read in timestamp
 			nsize = sizeof(time);
 			nsize++;
 			//char buf[nsize + 1];
-			puts("next");
+			//puts("next");
 			char *tmstring[nsize];
+			//Todo this needs improvement
 			sprintf(tmstring, "%11d", time);//convert to string
-			puts(tmstring);
+			//puts(tmstring);
 			strcat(message, tmstring);//add timestamp to message
-			puts("3");
+			//puts("3");
 			msg = nextnode->item.string;//read in error msg
 			strcat(message, msg);//adds to message 
-			puts("4\n");
+			//puts("4\n");
 			nextnode = nextnode->next;//get next node
 		}
 	}
@@ -116,9 +117,9 @@ char *getlog(void) {
 int savelog(char *filename){
 	//save messages to file
 	//use getlog to retrieve log as a string
-	puts("starting savelog\n");
+	//puts("starting savelog\n");
 	char *message = getlog();
-	puts(message);
+	//puts(message);
 	if(message != NULL){
 		//first open file
 		FILE *logfile;
@@ -126,7 +127,7 @@ int savelog(char *filename){
 		logfile = fopen(filename, "a");
 		if (logfile == NULL){
 			perror("Log file failed to open");
-			puts("couldn't open file\n");
+			//puts("couldn't open file\n");
 			return -1;
 		}else{
 			//write messages to logfile
