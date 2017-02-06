@@ -1,7 +1,7 @@
 #include <time.h>
 
 typedef struct data_struct {
-	time_t time;
+	long time;
 	char *string;
 	
 } data_t;

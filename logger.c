@@ -5,7 +5,12 @@
 #include <unistd.h>
 #include "loglib.h"
 
+char *program;
+
+	
 int main(int argc, char **argv){
+	//program name for log file
+	program = argv[0];
 	
 	//for use with getopt
 	extern char *optarg;
@@ -15,6 +20,7 @@ int main(int argc, char **argv){
 	static char usage[] = "usage: %s -h -n nValue -l filename\n";
 	
 	char *filename;
+	char *n;
 	int nValue;
 	
 	while((c = getopt(argc, argv, "hn:l:")) != -1)
@@ -24,7 +30,7 @@ int main(int argc, char **argv){
 				break;
 			case 'n':
 				nflag = 1;
-				nValue = optarg;//does this need int conversion?
+				n = optarg;
 				break;
 			case 'l':
 				lflag = 1;
@@ -39,49 +45,74 @@ int main(int argc, char **argv){
 		fprintf(stderr, usage, argv[0]);
 		exit(1);
 	}
-	//set filename for log
+	//set default filename for log
 	if(lflag == 0){
 		filename = "logfile.txt";
 	}
-		
-	//program name for log file
-	char *program = "./logger: ";
+	if(hflag ==1){
+		puts("-h for help\n-l filename to name output file\n-n x to enter an integer\n");
+	}	
 	
 	//default int value for log file
 	if(nflag == 0){
-		nValue = 42;
-	}
-		
-	//array of "error" messages
-	const char *msg[3];
-	for(int i=0; i<3; i++){
-		msg[i] = ": Error: nValue = ";
-		//add nValue !!need to be put in a string first!!
-		strcat(msg[i], nValue);
-	}
-	strcat (msg[0], " - Happy Birthday!\n");
-	strcat (msg[1], " - Thanks for visiting.\n");
-	strcat (msg[2], " - That won't work.\n");
-	
-	//puts message and timestamp into node
+		n = "42";
+	}//else
+		//nValue = atoi(n);
+	//
 	data_t temp;//for message and timestamp
 	
-	struct timespec res;
+	struct timespec *res;
+	struct timespec *tp;
 	clockid_t clockid;//clockid for timestamp
 	clockid = CLOCK_REALTIME;
 	
-	for(int i=0; i<3; i++){
-		clock_getres(clockid, res);
-		temp.time = res.tv_nsec;
-		temp.string = msg[i];
-		
-		addmsg(temp);//add message to node list
+	// "error" messages
+	char *msg = (char *)malloc(100);
+	if(msg == NULL){
+		perror("Couldn't allocate memory");
+		return -1;
 	}
-	
+	puts("allocated message memory");
+	int i;
+	int success=0;
+	for(i=0; i<3; i++){
+		msg[0]='\0';//empty string
+		strcpy(msg, ": Error: nValue = ");
+		strcat(msg, n);
+		if(i==0){
+			strcat(msg, " - Happy Birthday!\n");
+			puts("first message");
+		}else if(i==1){
+			strcat(msg, " - Thanks for visiting.\n");
+		}else{
+			strcat(msg, " - That won't work.\n");
+			puts("third message");
+		}
+		if(clock_getres(clockid, res) == 0){
+			//get the time
+			if(clock_gettime(clockid, tp) == 0){
+				temp.time = tp->tv_nsec;
+			}
+		}
+		//temp.time = res->tv_nsec;//time in nanosecs
+		puts("time: \n");
+		puts(msg);
+		temp.string = msg;
+		puts(temp.string);
+		//temp.time = 45448456545484412;
+		//strcpy(temp.string, msg);
+		if(addmsg(temp) == -1){
+			puts("did not add node to list");//add message to node list
+		}
+		else{
+			puts("added node");
+		}
+	}
 	
 	//call to savelog to write to file
 	if(savelog(filename) != 0){
 		perror("Failed to write to log file");
+		puts("savelog didn't work\n");
 	}
 	
 	//call clearlog to empty list 
