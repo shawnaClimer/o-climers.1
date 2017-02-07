@@ -15,8 +15,9 @@ static log_t *tailptr = NULL;
 
 static int totalsize = 0;
 
+//allocates node for data and adds to end of list
 int addmsg(data_t data) {
-	//allocates node for data and adds to end of list
+	
 	log_t *newnode;
 	int nodesize;
 	nodesize = sizeof(log_t) + strlen(data.string) + 1;
@@ -37,7 +38,6 @@ int addmsg(data_t data) {
 		tailptr->next = newnode;//adds to end of list
 	}
 	tailptr = newnode;
-	//puts("added node to list\n");
 	return 0;
 	
 }
@@ -49,6 +49,7 @@ void clearlog(void) {
 	//need to release memory
 	headptr = NULL;
 	tailptr = NULL;
+	
 	
 }
 
@@ -77,35 +78,22 @@ char *getlog(void) {
 	if(headptr == NULL){
 		//empty list
 		perror("Empty list");
-		//puts("empty list");
 		return NULL;
 	}else{
 		nextnode = headptr;
 		while(nextnode != NULL){
 			strcat(message, program); //begin with program name
-			//puts("1");
 			strcat(message, ": ");
-			//puts("2");
-			//puts(message);
 			time = nextnode->item.time;//read in timestamp
-			//nsize = sizeof(time);
-			//nsize++;
-			//char buf[nsize + 1];
-			//puts("next");
-			//char *tmstring[nsize];
-			//Todo this needs improvement
-			sprintf(tmstring, "%d", time);//convert to string
-			//puts(tmstring);
+			sprintf(tmstring, "%20d", time);//convert to string
 			strcat(message, tmstring);//add timestamp to message
-			//puts("3");
 			msg = nextnode->item.string;//read in error msg
 			strcat(message, msg);//adds to message 
-			//puts("4\n");
 			nextnode = nextnode->next;//get next node
 		}
 	}
 	
-	
+		
 	if (errno){
 		perror("Log message failed to build");
 		return NULL;
@@ -119,9 +107,7 @@ char *getlog(void) {
 int savelog(char *filename){
 	//save messages to file
 	//use getlog to retrieve log as a string
-	//puts("starting savelog\n");
 	char *message = getlog();
-	//puts(message);
 	if(message != NULL){
 		//first open file
 		FILE *logfile;
@@ -129,7 +115,6 @@ int savelog(char *filename){
 		logfile = fopen(filename, "a");
 		if (logfile == NULL){
 			perror("Log file failed to open");
-			//puts("couldn't open file\n");
 			return -1;
 		}else{
 			//write messages to logfile

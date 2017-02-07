@@ -1,2 +1,2 @@
 all: logger
-logger.o: loglib.h log.h
+logger.o: loglib.h log.h -lrt
